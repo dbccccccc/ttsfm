@@ -256,7 +256,7 @@ def _is_safe_url(target: Optional[str]) -> bool:
     and http/https schemes. Prevents open redirects to external domains.
     Handles backslashes and malformed URLs.
     """
-    if not target:
+    if not target or target.strip() == "" or target.startswith("#"):
         return False
 
     # Remove backslashes (browsers treat them as slashes)
@@ -267,8 +267,12 @@ def _is_safe_url(target: Optional[str]) -> bool:
     test_url = urlparse(urljoin(request.host_url, target))
 
     # Only allow relative URLs (no scheme/netloc) or absolute URLs to this host
-    if not urlparse(target).netloc and not urlparse(target).scheme:
-        return True
+    parsed_target = urlparse(target)
+    if not parsed_target.netloc and not parsed_target.scheme:
+        # Disallow fragments and suspicious paths
+        if parsed_target.path and not parsed_target.path.startswith("//"):
+            return True
+        return False
     return (
         test_url.scheme in ("http", "https")
         and ref_url.netloc == test_url.netloc
@@ -279,7 +283,7 @@ def set_language(lang_code):
     if set_locale(lang_code):
         # Redirect back only if the referrer is safe; otherwise go home
         target = request.referrer
-        if _is_safe_url(target):
+        if target and _is_safe_url(target):
             return redirect(target)
         return redirect(url_for('index'))
     else:
