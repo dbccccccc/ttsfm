@@ -9,7 +9,7 @@
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=dbccccccc/ttsfm&type=Date)](https://www.star-history.com/#dbccccccc/ttsfm&Date)
+[![Star History Chart](https://star-history.dera.page/svg?repos=dbccccccc/ttsfm&type=Date)](https://star-history.dera.page/#dbccccccc/ttsfm&Date)
 
 ## Overview
 
